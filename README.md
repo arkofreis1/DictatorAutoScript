@@ -1,28 +1,22 @@
-# Dictator Script
+# Dictator Auto-Script
 
-**Dictator Script** is a client-side automation tool for Minecraft. It allows you to automate block mining, inventory management, and routine tasks with ease. This mod is designed for **single-player or private server use** where automation is allowed.  
-
-> ⚠️ **Warning:** Using automation on public servers may violate server rules. Use responsibly.
+**Dictator Auto-Script** is a client-side automation tool for Dictator members on the Minecraft server 5b5t.org. It allows you to automate block mining using Baritone and automatically regears if killed via Baritone path finding to an Ender Chest.
 
 ---
 
-## Features
+## Requirements
 
-- Toggle automation on and off with simple commands.
-- Set target blocks to mine automatically.
-- Integrates with Baritone for pathfinding and mining.
-- Automatically equips tools, handles inventory, and manages movement.
-- Can automatically retrieve kits from chests and manage shulker boxes.
-- Customizable mining routines with easy-to-use commands.
+- Baritone for 1.12.2.
+- AutoArmor, AutoTotem, AutoRespawn, AutoReconnect.
+- The script looks for Black shulker boxes in the Ender Chest.
 
 ---
 
 ## Installation
 
-1. Ensure you have **Minecraft Forge** installed for your version.
-2. Place the compiled `.jar` file into your `mods` folder.
-3. Launch Minecraft with the Forge profile.
-4. Join your world or server (private world recommended).
+1. Make sure you have **Minecraft Forge 1.12.2** installed.
+2. Place the compiled `.jar` file into your `mods` folder via `%appdata% -> `.minecraft`.
+3. Launch Minecraft with the Forge profile selected.
 
 ---
 
