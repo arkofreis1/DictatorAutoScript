@@ -1,4 +1,4 @@
-5. Add function that when server restart and autoconnect, autorestartscript# Dictator Auto-Script
+# Dictator Auto-Script
 
 **Dictator Auto-Script** is a client-side automation tool for Dictator members on the Minecraft server 5b5t.org. It allows you to automate block mining using Baritone and automatically regears if killed via Baritone path finding to an Ender Chest.
 
