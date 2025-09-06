@@ -76,12 +76,12 @@ All commands are prefixed with a comma `,`:
 A: Use ,disable to completely stop the mod.
 
 
-**Q: How do I use ,set to mine more than 1 block?**
+**Q: How do I use `,set` to mine more than 1 block?**
 
 A: It supports spaces between arguments to allow multiple blocks. `,set dirt cobblestone`
 
 
-**Q: What if I spawn at Y 256 and it can't find an Ender Chest?**
+**Q: What if I spawn at `Y 256` and it can't find an Ender Chest?**
 
 A: After 1 minute, if it can't find an Ender Chest, it will run /kill to respawn elsewhere.
 
