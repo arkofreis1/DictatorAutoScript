@@ -27,7 +27,7 @@ All commands are prefixed with a comma `,`:
 | Command | Description |
 |---------|-------------|
 | `,enable` | Enables Dictator Auto-Script and Baritone arguments. |
-| `,disable` | Disables Dictator Auto-Script and Baritone arguments. |
+| `,disable` | Disables Dictator Auto-Script, Baritone arguments and stops Baritone. |
 | `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. `,set dirt cobblestone`. |
 | `,start` | Start mining the selected blocks if already alive with items. (Otherwise use `/kill` after `,set` to fully run the script.) |
 | `,stop` | Stops mining and stops Baritone. |
@@ -55,13 +55,13 @@ All commands are prefixed with a comma `,`:
 /kill (Script automatically runs onDeath)
 ```
 
-4. Stop automation anytime:
+4. Stop Baritone:
 
 ```text
 ,stop (Stops Baritone. Recommended if you want to change the selected blocks.)
 ```
 
-5. Resume automation anytime:
+5. Resume Baritone:
 
 ```text
 ,start (Resumes Baritone. Recommended if you already are geared up.)
