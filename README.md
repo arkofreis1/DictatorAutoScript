@@ -75,17 +75,21 @@ All commands are prefixed with a comma `,`:
 
 A: Use ,disable to completely stop the mod.
 
+
 **Q: How do I use ,set to mine more than 1 block?**
 
 A: ,set supports spaces between arguments to allow multiple blocks. `,set dirt cobblestone`
+
 
 **Q: What if I spawn at Y 256 and it can't find an Ender Chest?**
 
 A: After 1 minute, if it can't find an Ender Chest, it will run /kill to respawn elsewhere.
 
+
 **Q: Can I change the prefix or colour of Shulker box that the script looks for?**
 
 A: Not at the moment, but it is a feature I will add in future updates.
+
 
 **Q: What if the server restarts and after using AutoReconnect the script is disabled?**
 
