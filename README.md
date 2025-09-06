@@ -35,7 +35,7 @@ All commands are prefixed with a comma `,`:
 
 ---
 
-## Example Workflow
+## Example
 
 1. Enable the mod:
 
@@ -49,7 +49,7 @@ All commands are prefixed with a comma `,`:
 ,set diamond_ore iron_ore (Tells Baritone what to mine & look for)
 ```
 
-3. Start mining:
+3. Start script:
 
 ```text
 /kill (Script automatically runs onDeath)
@@ -58,7 +58,13 @@ All commands are prefixed with a comma `,`:
 4. Stop automation anytime:
 
 ```text
-,stop
+,stop (Stops only Baritone, does not affect script)
+```
+
+5. Resume automation anytime:
+
+```text
+,start (Resumes only Baritone, does not affect script)
 ```
 
 ---
