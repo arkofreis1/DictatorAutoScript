@@ -27,10 +27,10 @@ All commands are prefixed with a comma `,`:
 | Command | Description |
 |---------|-------------|
 | `,enable` | Enables Dictator Auto-Script and Baritone arguments. |
-| `,disable` | Disables Dictator Auto-Script. |
-| `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. Example: `,set diamond_ore gold_ore`. |
-| `,start` | Start mining the selected blocks. |
-| `,stop` | Stops Baritone automation. |
+| `,disable` | Disables Dictator Auto-Script and Baritone arguments. |
+| `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. `,set dirt cobblestone`. |
+| `,start` | Start mining the selected blocks if already alive with items. (Otherwise use /kill after ,set to fully run the script) |
+| `,stop` | Stops mining and stops Baritone. |
 | `,help` | Shows a help message with available commands. |
 
 ---
@@ -46,7 +46,7 @@ All commands are prefixed with a comma `,`:
 2. Set the blocks you want to mine:
 
 ```text
-,set diamond_ore iron_ore (Tells Baritone what to mine & look for)
+,set dirt cobblestone (Tells Baritone what to mine & look for)
 ```
 
 3. Start script:
@@ -78,7 +78,7 @@ A: Use ,disable to completely stop the mod.
 
 **Q: How do I use ,set to mine more than 1 block?**
 
-A: ,set supports spaces between arguments to allow multiple blocks. `,set dirt cobblestone`
+A: It supports spaces between arguments to allow multiple blocks. `,set dirt cobblestone`
 
 
 **Q: What if I spawn at Y 256 and it can't find an Ender Chest?**
