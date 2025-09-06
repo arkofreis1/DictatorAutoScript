@@ -7,7 +7,7 @@
 ## Requirements
 
 - Baritone for 1.12.2.
-- AutoArmor, AutoTotem, AutoRespawn, AutoReconnect.
+- AutoArmor, AutoTotem, AutoRespawn, AutoReconnect, AutoEat.
 - Black shulker boxes in the Ender Chest.
 
 ---
