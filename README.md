@@ -110,6 +110,7 @@ A: Currently it doesn't support stacked shulker boxes but it will be implemented
 ## Contributing
 
 Contributions are welcome! Feel free to submit bug reports, feature requests, or pull requests.
+
 Message me on Discord: `arkofreis_` Or join: https://discord.gg/5FmVE4nbax/
 
 ---
