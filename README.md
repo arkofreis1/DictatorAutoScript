@@ -29,7 +29,7 @@ All commands are prefixed with a comma `,`:
 | `,enable` | Enables Dictator Auto-Script and Baritone arguments. |
 | `,disable` | Disables Dictator Auto-Script and Baritone arguments. |
 | `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. `,set dirt cobblestone`. |
-| `,start` | Start mining the selected blocks if already alive with items. (Otherwise use /kill after ,set to fully run the script) |
+| `,start` | Start mining the selected blocks if already alive with items. (Otherwise use `/kill` after `,set` to fully run the script.) |
 | `,stop` | Stops mining and stops Baritone. |
 | `,help` | Shows a help message with available commands. |
 
@@ -58,13 +58,13 @@ All commands are prefixed with a comma `,`:
 4. Stop automation anytime:
 
 ```text
-,stop (Stops only Baritone, does not affect script)
+,stop (Stops Baritone. Recommended if you want to change the selected blocks.)
 ```
 
 5. Resume automation anytime:
 
 ```text
-,start (Resumes only Baritone, does not affect script)
+,start (Resumes Baritone. Recommended if you already are geared up.)
 ```
 
 ---
@@ -94,6 +94,11 @@ A: Not at the moment, but it is a feature I will add in future updates.
 **Q: What if the server restarts and after using AutoReconnect the script is disabled?**
 
 A: I will be adding an AutoResume function very soon to counteract this.
+
+
+**Q: Can I pause Baritone `,stop` and change the selected blocks `,set` and then resume `,start`?**
+
+A: Yes! That is the purpose for the `,stop` and `,start` function. Not recommended if you have no items.
 
 ---
 
