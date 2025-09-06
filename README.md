@@ -8,7 +8,7 @@
 
 - Baritone for 1.12.2.
 - AutoArmor, AutoTotem, AutoRespawn, AutoReconnect.
-- The script looks for Black shulker boxes in the Ender Chest.
+- Black shulker boxes in the Ender Chest.
 
 ---
 
@@ -86,7 +86,7 @@ A: It supports spaces between arguments to allow multiple blocks. `,set dirt cob
 A: After 1 minute, if it can't find an Ender Chest, it will run /kill to respawn elsewhere.
 
 
-**Q: Can I change the prefix or colour of Shulker box that the script looks for?**
+**Q: Can I change the prefix or colour of shulker box that the script looks for?**
 
 A: Not at the moment, but it is a feature I will add in future updates.
 
@@ -110,6 +110,7 @@ A: Currently it doesn't support stacked shulker boxes but it will be implemented
 ## Contributing
 
 Contributions are welcome! Feel free to submit bug reports, feature requests, or pull requests.
+Message me on Discord: `arkofreis_` Or join: https://discord.gg/5FmVE4nbax/
 
 ---
 
