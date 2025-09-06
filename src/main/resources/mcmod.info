@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dictatorscript",
+  "name": "Dictator Auto-Script",
+  "description": "Client-side mod that makes newfags rage kek",
+  "version": "1.0",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["arkofreis"],
+  "credits": "arkofreis, sburra, knifehandzx",
+  "logoFile": "assets/dictatorscript/textures/gui/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
