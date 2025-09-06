@@ -100,6 +100,11 @@ A: I will be adding an AutoResume function very soon to counteract this.
 
 A: Yes! That is the purpose for the `,stop` and `,start` function. Not recommended if you have no items.
 
+
+**Q: What if the black shulker boxes are stacked?**
+
+A: Currently it doesn't support stacked shulker boxes but it will be implemented in the future.
+
 ---
 
 ## Contributing
