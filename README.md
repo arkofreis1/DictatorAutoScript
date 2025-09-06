@@ -58,8 +58,14 @@ All commands are prefixed with a comma `,`:
 4. Stop automation anytime:
 
 ```text
-,disable
+,stop
 ```
+
+---
+
+## FAQ
+
+Contributions are welcome! Feel free to submit bug reports, feature requests, or pull requests.
 
 ---
 
