@@ -27,7 +27,7 @@ The default prefix is comma `,`:
 | Command | Description |
 |---------|-------------|
 | `,enable` | Enables Dictator Auto-Script and Baritone arguments. |
-| `,disable` | Disables Dictator Auto-Script, Baritone arguments and stops Baritone. |
+| `,disable` | Disables Dictator Auto-Script and Baritone arguments. Stops current script and Baritone. |
 | `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. `,set dirt cobblestone`. |
 | `,start` | Start mining the selected blocks if already alive with items. (Otherwise use `/kill` after `,set` to fully run the script.) |
 | `,stop` | Stops mining and stops Baritone. |
