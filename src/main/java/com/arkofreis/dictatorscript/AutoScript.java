@@ -12,6 +12,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Container;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -34,6 +35,8 @@ public class AutoScript {
     private static Container currentContainer = null;
     private static EnderChestHandler enderChestHandler = null;
     private static TickHandler tickHandler = null;
+    private static ReturnShulkerHandler returnHandler = null;
+    private static int pendingReturnSlotIdx = -1;
 
     public static void runFullRoutine(List<String> items) {
         Minecraft mc = Minecraft.getMinecraft();
@@ -124,6 +127,51 @@ public class AutoScript {
         }
     }
 
+    private static class ReturnShulkerHandler {
+        private long registeredAt = System.currentTimeMillis();
+
+        @SubscribeEvent
+        public void onGuiOpen(GuiOpenEvent event) {
+            if (!(event.getGui() instanceof GuiChest)) return;
+            GuiChest guiChest = (GuiChest) event.getGui();
+            ContainerChest container = (ContainerChest) guiChest.inventorySlots;
+            IInventory lower = container.getLowerChestInventory();
+            String name = lower.getName().toLowerCase();
+            if ((name.contains("ender") || name.contains("chest")) && lower.getSizeInventory() == 27) {
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    Minecraft mc = Minecraft.getMinecraft();
+                    if (mc.player == null) return;
+                    int start = 27;
+                    int end = container.inventorySlots.size();
+                    int stackSlot = -1;
+                    for (int i = start; i < end; i++) {
+                        ItemStack s = container.getSlot(i).getStack();
+                        if (!s.isEmpty() && s.getItem().getRegistryName().toString().equals(ConfigManager.getShulkerRegistryId()) && s.getCount() > 1) {
+                            stackSlot = i;
+                            break;
+                        }
+                    }
+                    if (stackSlot != -1) {
+                        mc.playerController.windowClick(container.windowId, stackSlot, 0, ClickType.QUICK_MOVE, mc.player);
+                    }
+                    MinecraftForge.EVENT_BUS.unregister(this);
+                    returnHandler = null;
+                    pendingReturnSlotIdx = -1;
+                });
+            }
+        }
+
+        @SubscribeEvent
+        public void onClientTick(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.END) return;
+            if (System.currentTimeMillis() - registeredAt > 15000L) {
+                MinecraftForge.EVENT_BUS.unregister(this);
+                returnHandler = null;
+                pendingReturnSlotIdx = -1;
+            }
+        }
+    }
+
     private static class TickHandler {
         @SubscribeEvent
         public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -202,17 +250,21 @@ public class AutoScript {
 
         int blackShulkerSlot = -1;
         List<Integer> blackSlots = new ArrayList<>();
+        List<Integer> singleStacks = new ArrayList<>();
         for (int slot = 0; slot < 27; slot++) {
             ItemStack stack = container.getSlot(slot).getStack();
             if (!stack.isEmpty()) {
                 String itemName = stack.getItem().getRegistryName().toString();
-                if (itemName.equals("minecraft:black_shulker_box")) {
+                if (itemName.equals(ConfigManager.getShulkerRegistryId())) {
                     blackSlots.add(slot);
+                    if (stack.getCount() <= 1) {
+                        singleStacks.add(slot);
+                    }
                 }
             }
         }
-        if (!blackSlots.isEmpty()) {
-            blackShulkerSlot = blackSlots.get(ThreadLocalRandom.current().nextInt(blackSlots.size()));
+        if (!singleStacks.isEmpty()) {
+            blackShulkerSlot = singleStacks.get(ThreadLocalRandom.current().nextInt(singleStacks.size()));
         }
 
         if (blackShulkerSlot != -1) {
@@ -221,7 +273,86 @@ public class AutoScript {
 
             if (count <= 1) {
                 mc.playerController.windowClick(container.windowId, blackShulkerSlot, 0, ClickType.QUICK_MOVE, mc.player);
+            } else if (!ConfigManager.getIgnoreStackedShulkers() && DictatorScript.enabled) {
+                if (!mc.player.inventory.getItemStack().isEmpty()) {
+                    mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cCannot take shulker: cursor not empty."));
+                    mc.player.closeScreen();
+                    return;
+                }
+                mc.playerController.windowClick(container.windowId, blackShulkerSlot, 0, ClickType.PICKUP, mc.player);
+                Thread.sleep(150);
+
+                mc.player.closeScreen();
+                Thread.sleep(700);
+                mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiInventory(mc.player)));
+                int wait = 0;
+                while (!(Minecraft.getMinecraft().currentScreen instanceof GuiInventory) && wait < 80) {
+                    Thread.sleep(50);
+                    wait++;
+                }
+                if (!(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)) {
+                    mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cCould not open inventory to split shulker."));
+                    return;
+                }
+                Container inv = ((GuiInventory) Minecraft.getMinecraft().currentScreen).inventorySlots;
+                int stackSlot = -1;
+                for (int i = 0; i < inv.inventorySlots.size(); i++) {
+                    ItemStack s = inv.getSlot(i).getStack();
+                    if (!s.isEmpty()
+                            && s.getItem().getRegistryName().toString().equals(ConfigManager.getShulkerRegistryId())
+                            && s.getCount() > 1) {
+                        stackSlot = i;
+                        break;
+                    }
+                }
+                if (stackSlot == -1) {
+                    mc.player.closeScreen();
+                    Thread.sleep(300);
+                } else {
+                    int emptySlot = -1;
+                    for (int i = inv.inventorySlots.size() - 9; i < inv.inventorySlots.size(); i++) {
+                        if (i >= 0 && i < inv.inventorySlots.size() && !inv.getSlot(i).getHasStack()) {
+                            emptySlot = i; break;
+                        }
+                    }
+                    if (emptySlot == -1) {
+                        for (int i = 0; i < inv.inventorySlots.size(); i++) {
+                            if (!inv.getSlot(i).getHasStack()) { emptySlot = i; break; }
+                        }
+                    }
+                    if (emptySlot == -1) {
+                        mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNo empty slot to place a single shulker."));
+                        mc.player.closeScreen();
+                        Thread.sleep(300);
+                    } else {
+                        mc.playerController.windowClick(inv.windowId, stackSlot, 0, ClickType.PICKUP, mc.player);
+                        Thread.sleep(120);
+                        mc.playerController.windowClick(inv.windowId, emptySlot, 1, ClickType.PICKUP, mc.player);
+                        Thread.sleep(120);
+                        mc.playerController.windowClick(inv.windowId, stackSlot, 0, ClickType.PICKUP, mc.player);
+                        Thread.sleep(120);
+                        mc.player.closeScreen();
+                        Thread.sleep(700);
+                    }
+                }
+                new Thread(() -> {
+                    try {
+                        AutoScript.sendChat("#goto ender_chest");
+                    } catch (Exception ignored) {}
+                }).start();
+                if (returnHandler != null) {
+                    MinecraftForge.EVENT_BUS.unregister(returnHandler);
+                }
+                returnHandler = new ReturnShulkerHandler();
+                MinecraftForge.EVENT_BUS.register(returnHandler);
+                return;
+
             } else {
+                if (ConfigManager.getIgnoreStackedShulkers()) {
+                    mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7eIgnoring stacked shulker (config)."));
+                    mc.player.closeScreen();
+                    return;
+                }
                 if (!mc.player.inventory.getItemStack().isEmpty()) {
                     mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cCannot take shulker: cursor not empty."));
                     mc.player.closeScreen();
@@ -266,7 +397,7 @@ public class AutoScript {
             boolean foundInHotbar = false;
             for (int i = 0; i < 9; i++) {
                 ItemStack stack = mc.player.inventory.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.getItem().getRegistryName().toString().equals("minecraft:black_shulker_box")) {
+                if (!stack.isEmpty() && stack.getItem().getRegistryName().toString().equals(ConfigManager.getShulkerRegistryId())) {
                     mc.player.inventory.currentItem = i;
                     foundInHotbar = true;
                     break;
@@ -276,7 +407,7 @@ public class AutoScript {
             if (!foundInHotbar) {
                 for (int i = 9; i < 36; i++) {
                     ItemStack stack = mc.player.inventory.getStackInSlot(i);
-                    if (!stack.isEmpty() && stack.getItem().getRegistryName().toString().equals("minecraft:black_shulker_box")) {
+                    if (!stack.isEmpty() && stack.getItem().getRegistryName().toString().equals(ConfigManager.getShulkerRegistryId())) {
                         int hotbarSlot = 0;
                         mc.playerController.windowClick(0, i, hotbarSlot, ClickType.SWAP, mc.player);
                         mc.player.inventory.currentItem = hotbarSlot;
@@ -288,7 +419,8 @@ public class AutoScript {
             }
 
             if (!foundInHotbar) {
-                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cBlack shulker box not found."));
+                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7c" + ConfigManager.getShulkerColorDisplay() + " shulker box not found."));
+                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7eYou can change it via \u00A7f" + ConfigManager.getCommandPrefix() + "shulkerColor {color}\u00A7e."));
                 return;
             }
 
@@ -299,8 +431,8 @@ public class AutoScript {
                 Thread.sleep(500);
 
                 ItemStack heldItem = mc.player.getHeldItem(EnumHand.MAIN_HAND);
-                if (heldItem.isEmpty() || !heldItem.getItem().getRegistryName().toString().equals("minecraft:black_shulker_box")) {
-                    mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNot holding black shulker box."));
+                if (heldItem.isEmpty() || !heldItem.getItem().getRegistryName().toString().equals(ConfigManager.getShulkerRegistryId())) {
+                    mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNot holding the configured shulker box."));
                     return;
                 }
 
@@ -350,9 +482,18 @@ public class AutoScript {
 
             } else {
                 mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cCould not find placement position."));
+                Thread.sleep(2500);
+                AutoScript.sendChat("/kill");
             }
         } else {
-            mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNo black shulker box found in ender chest."));
+            if (ConfigManager.getIgnoreStackedShulkers() && singleStacks.isEmpty()) {
+                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cUnable to find singular shulker boxes."));
+                Thread.sleep(2500);
+                AutoScript.sendChat("/kill");
+            } else {
+                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7c" + ConfigManager.getShulkerColorDisplay() + " shulker box not found."));
+                mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7eYou can change it via \u00A7f" + ConfigManager.getCommandPrefix() + "shulkerColor {color}\u00A7e."));
+            }
             mc.player.closeScreen();
         }
     }
@@ -370,13 +511,53 @@ public class AutoScript {
 
                         if (pendingItems != null && !pendingItems.isEmpty()) {
                             String mineCommand = "#mine " + String.join(" ", pendingItems);
-                            mc.addScheduledTask(() -> {
-                                if (mc.player != null) {
-                                    mc.player.sendMessage(new TextComponentString(
-                                            "\u00A77[\u00A7fDictatorScript\u00A77] \u00A7aExecuting: " + mineCommand));
-                                    sendChat(mineCommand);
+
+                            if (ConfigManager.getGoToGround()) {
+                                mc.addScheduledTask(() -> {
+                                    if (mc.player != null) {
+                                        mc.player.sendMessage(new TextComponentString(
+                                                "\u00A77[\u00A7fDictatorScript\u00A77] \u00A7eMoving to Y=5, then will execute: " + mineCommand));
+                                    }
+                                });
+
+                                sendChat("#goto ~ 5 ~");
+
+                                int checks = 0;
+                                boolean reached = false;
+                                while (checks < 600) {
+                                    Thread.sleep(200);
+                                    Minecraft mcRef = Minecraft.getMinecraft();
+                                    if (mcRef.player == null) break;
+                                    if (mcRef.player.posY <= 5.5) {
+                                        reached = true;
+                                        break;
+                                    }
+                                    checks++;
                                 }
-                            });
+
+                                sendChat("#stop");
+                                Thread.sleep(300);
+
+                                final boolean reachedFinal = reached;
+                                mc.addScheduledTask(() -> {
+                                    if (mc.player != null) {
+                                        if (!reachedFinal) {
+                                            mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7eCould not reach Y=5 in time, proceeding to mine."));
+                                        } else {
+                                            mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7aReached Y=5. Starting to mine."));
+                                        }
+                                        sendChat(mineCommand);
+                                    }
+                                });
+                            } else {
+                                mc.addScheduledTask(() -> {
+                                    if (mc.player != null) {
+                                        mc.player.sendMessage(new TextComponentString(
+                                                "\u00A77[\u00A7fDictatorScript\u00A77] \u00A7aStarting to mine immediately."));
+                                        sendChat(mineCommand);
+                                    }
+                                });
+                            }
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -423,6 +604,8 @@ public class AutoScript {
         BlockPos frontPos = playerPos.add(frontX, 0, frontZ);
         BlockPos frontSupport = frontPos.down();
         if (mc.world.isAirBlock(frontPos)
+                && frontPos.getY() < 255
+                && mc.world.isAirBlock(frontPos.up())
                 && !mc.world.isAirBlock(frontSupport)
                 && mc.world.getBlockState(frontSupport).isFullBlock()) {
             return frontPos;
@@ -434,6 +617,8 @@ public class AutoScript {
                 BlockPos checkPos = playerPos.add(x, 0, z);
                 BlockPos support = checkPos.down();
                 if (mc.world.isAirBlock(checkPos)
+                        && checkPos.getY() < 255
+                        && mc.world.isAirBlock(checkPos.up())
                         && !mc.world.isAirBlock(support)
                         && mc.world.getBlockState(support).isFullBlock()) {
                     return checkPos;
@@ -455,6 +640,11 @@ public class AutoScript {
         BlockPos support = pos.down();
         if (mc.world.isAirBlock(support) || !mc.world.getBlockState(support).isFullBlock()) {
             mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNo solid block beneath to place the shulker on."));
+            return;
+        }
+
+        if (!mc.world.isAirBlock(pos) || !mc.world.isAirBlock(pos.up())) {
+            mc.player.sendMessage(new TextComponentString("\u00A77[\u00A7fDictatorScript\u00A77] \u00A7cNot enough space to place/open shulker (block above)."));
             return;
         }
 
