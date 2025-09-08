@@ -22,7 +22,7 @@
 
 ## Commands
 
-All commands are prefixed with a comma `,`:
+The default prefix is comma `,`:
 
 | Command | Description |
 |---------|-------------|
@@ -32,6 +32,15 @@ All commands are prefixed with a comma `,`:
 | `,start` | Start mining the selected blocks if already alive with items. (Otherwise use `/kill` after `,set` to fully run the script.) |
 | `,stop` | Stops mining and stops Baritone. |
 | `,help` | Shows a help message with available commands. |
+| `,auto` | Auto starts script process (enable, set, kill). |
+| `,cls` | Clears chat, client-side only. |
+| `,config / ,conf` | Show the configuration menu. |
+| `,autoWhisper / ,aw` | Sends the configured message. |
+| `,autoWhisper / ,aw set {string}` | Sets the configured message. |
+| `,modPrefix / ,mp {prefix}` | Set prefix for mod. |
+| `,shulkerColor / ,sc {color}` | Set the color of Shulker that the mod looks for. |
+| `,goToGround / ,gtg {bool}` | Choose whether to go to Y=5 before mining. |
+| `,ignoreStackedShulkers / ,iss {bool}` | Choose whether to ignore stacked shulkers (true is default). |
 
 ---
 
