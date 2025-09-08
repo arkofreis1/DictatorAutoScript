@@ -97,7 +97,7 @@ A: After 1 minute, if it can't find an Ender Chest, it will run /kill to respawn
 
 **Q: Can I change the prefix or colour of shulker box that the script looks for?**
 
-A: Not at the moment, but it is a feature I will add in future updates.
+A: Yes! To change the prefix, use `,modPrefix / ,mp {prefix}` and to change the color of shulker box, `,shulkerColor / ,sc {color}`.
 
 
 **Q: What if the server restarts and after using AutoReconnect the script is disabled?**
@@ -112,7 +112,7 @@ A: Yes! That is the purpose for the `,stop` and `,start` function. Not recommend
 
 **Q: What if the black shulker boxes are stacked?**
 
-A: Currently it doesn't support stacked shulker boxes but it will be implemented in the future.
+A: Use `,ignoreStackedShulkers / ,iss {bool}` to ignore them (true by default).
 
 ---
 
