@@ -7,7 +7,7 @@
 ## Requirements
 
 - Baritone for 1.12.2.
-- Lambda for 1.12.2 (not required but recommended)
+- Lambda for 1.12.2 (not required but recommended).
 - AutoArmor, AutoTotem, AutoRespawn, AutoReconnect, AutoEat.
 - Shulker boxes in the Ender Chest (choose color via `,shulkerColor / ,sc {color}`.
 
@@ -114,6 +114,11 @@ A: Yes! That is the purpose for the `,stop` and `,start` function. Not recommend
 **Q: What if the black shulker boxes are stacked?**
 
 A: Use `,ignoreStackedShulkers / ,iss {bool}` to ignore them (true by default).
+
+
+**Q: What colors can I use for `,shulkerColor / ,sc {color}`?**
+
+A: Check the changelog for the full list.
 
 ---
 
