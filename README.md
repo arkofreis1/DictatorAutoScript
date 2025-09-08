@@ -7,8 +7,9 @@
 ## Requirements
 
 - Baritone for 1.12.2.
+- Lambda for 1.12.2 (not required but recommended)
 - AutoArmor, AutoTotem, AutoRespawn, AutoReconnect, AutoEat.
-- Black shulker boxes in the Ender Chest.
+- Shulker boxes in the Ender Chest (choose color via `,shulkerColor / ,sc {color}`.
 
 ---
 
