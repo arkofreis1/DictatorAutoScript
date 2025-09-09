@@ -1,6 +1,6 @@
-# Dictator Auto-Script
+# EZAutoScript
 
-**Dictator Auto-Script** is a client-side automation tool for Dictator members on the Minecraft server 5b5t.org. It allows you to automate block mining using Baritone and automatically regears if killed via Baritone path finding to an Ender Chest.
+**EZAutoScript** is a client-side automation tool for Dictator members on the Minecraft server 5b5t.org. It allows you to automate block mining using Baritone and automatically regears if killed via Baritone path finding to an Ender Chest.
 
 ---
 
@@ -27,8 +27,8 @@ The default prefix is comma `,`:
 
 | Command | Description |
 |---------|-------------|
-| `,enable` | Enables Dictator Auto-Script and Baritone arguments. |
-| `,disable` | Disables Dictator Auto-Script and Baritone arguments. Stops current script and Baritone. |
+| `,enable` | Enables EZAutoScript and Baritone arguments. |
+| `,disable` | Disables EZAutoScript and Baritone arguments. Stops current script and Baritone. |
 | `,set {block(s)}` | Set blocks you want to mine. Separate multiple blocks with spaces. `,set dirt cobblestone`. |
 | `,start` | Start mining the selected blocks if already alive with items. (Otherwise use `/kill` after `,set` to fully run the script.) |
 | `,stop` | Stops mining and stops Baritone. |
