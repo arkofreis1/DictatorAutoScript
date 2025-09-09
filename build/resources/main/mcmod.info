@@ -1,9 +1,9 @@
 [
 {
-  "modid": "dictatorscript",
-  "name": "Dictator Auto-Script",
-  "description": "Client-side mod that makes newfags rage kek",
-  "version": "1.1",
+  "modid": "ezautoscript",
+  "name": "EZAutoScript",
+  "description": "Client-side mod that makes noobs rage kek",
+  "version": "1.1.1",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",

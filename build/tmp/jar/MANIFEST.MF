@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Implementation-Title: DictatorAutoScript
-Implementation-Version: 1.1
+Implementation-Title: EZAutoScript
+Implementation-Version: 1.1.1
 Specification-Vendor: arkofreis
-Specification-Title: dictatormod
-Implementation-Timestamp: 2025-09-08T15:42:16+0200
-Specification-Version: 1.1
+Specification-Title: ezautoscript
+Implementation-Timestamp: 2025-09-09T15:17:53+0200
+Specification-Version: 1.1.1
 Implementation-Vendor: arkofreis
 

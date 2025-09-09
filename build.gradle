@@ -13,9 +13,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1'
-group = 'com.arkofreis.dictatorscript' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'DictatorAutoScript'
+version = '1.1.1'
+group = 'com.arkofreis.ezautoscript' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'EZAutoScript'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -85,9 +85,9 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "dictatormod",
+            "Specification-Title": "ezautoscript",
             "Specification-Vendor": "arkofreis",
-            "Specification-Version": "1.1", // We are version 1 of ourselves
+            "Specification-Version": "1.1.1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"arkofreis",
